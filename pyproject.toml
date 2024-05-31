@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling", "flask"]
+build-backend = "hatchling.build"
+
+[project]
+name = "hiss"
+version = "1.0.0"
+authors = [
+  { name="thetrotfreak", email="thetrotfreak@yahoo.com" },
+]
+description = "Simple microblogging web application in Flask"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/thetrotfreak/hiss"
+Issues = "https://github.com/thetrotfreak/hiss/issues"
