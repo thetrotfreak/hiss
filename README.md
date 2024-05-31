@@ -20,3 +20,32 @@
 
 ![image](https://github.com/thetrotfreak/hiss/assets/45330487/6f31e154-ab72-41c0-931d-b63b5a41d3d5)
 
+## Installation
+
+### Ubuntu 22.04.4 LTS
+1. Setup a virtual environment
+```shell
+python3 -m venv venv
+```
+2. Activate the virtual environment
+```shell
+source venv/bin/activate
+```
+> ^For Bash & Bash-like shell
+3. Install requirements
+```shell
+pip install -r requirements.txt
+```
+4. Install the `.whl` file
+```shell
+pip install hiss-1.0.0-py3-none-any.whl
+```
+> ^Check the version number
+5. Intialize the sqlite3 database
+```shell
+flask --app hiss init-db
+```
+6. Start the development server
+```shell
+flask --app hiss run --debug
+```
