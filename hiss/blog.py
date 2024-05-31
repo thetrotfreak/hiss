@@ -27,6 +27,37 @@ def index():
     return render_template("blog/index.html", posts=posts, likes=likes)
 
 
+@bp.route("/replies")
+def replies():
+    """Show all your replies, most recent first."""
+    db = get_db()
+    replies = db.execute(
+        "SELECT p.id, p.body, p.created, p.author_id, u.username"
+        " FROM post p"
+        " JOIN user u ON p.author_id = u.id"
+        " WHERE p.author_id = ? AND p.reply_to_id IS NOT NULL"
+        " ORDER BY p.created DESC",
+        (g.user["id"],),
+    ).fetchall()
+    return render_template("blog/reply.all.html", posts=replies)
+
+
+@bp.route("/likes")
+def likes():
+    """Show all your likes, most recent first."""
+    db = get_db()
+    likes = db.execute(
+        "SELECT p.*, username"
+        " FROM post p"
+        " JOIN likes l on p.id = l.post_id"
+        " JOIN user u on p.author_id = u.id"
+        " WHERE l.user_id = ?"
+        " ORDER BY p.created DESC",
+        (g.user["id"],),
+    ).fetchall()
+    return render_template("blog/like.all.html", posts=likes)
+
+
 def get_post(id, check_author=True):
     """Get a post and its author by id.
 
@@ -42,7 +73,7 @@ def get_post(id, check_author=True):
     post = (
         get_db()
         .execute(
-            "SELECT p.id, body, created, author_id, username"
+            "SELECT p.id, reply_to_id, body, created, author_id, username"
             " FROM post p JOIN user u ON p.author_id = u.id"
             " WHERE p.id = ?",
             (id,),
@@ -95,13 +126,35 @@ def update(id):
             flash(error)
         else:
             db = get_db()
-            db.execute(
-                "UPDATE post SET body = ? WHERE id = ?", (body, id)
-            )
+            db.execute("UPDATE post SET body = ? WHERE id = ?", (body, id))
             db.commit()
             return redirect(url_for("blog.index"))
 
     return render_template("blog/update.html", post=post)
+
+
+@bp.route("/<int:id>/reply", methods=("GET", "POST"))
+@login_required
+def reply(id):
+    """Reply to a post if the current user is not the author."""
+    post = get_post(id=id, check_author=False)
+
+    if request.method == "POST":
+        body = request.form["body"]
+        error = None
+
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            db.execute(
+                "INSERT OR REPLACE INTO post (body, author_id, reply_to_id) VALUES (?, ?, ?)",
+                (body, g.user["id"], id),
+            )
+            db.commit()
+            return redirect(url_for("blog.index"))
+
+    return render_template("blog/reply.html", post=post)
 
 
 @bp.route("/<int:id>/delete", methods=("POST",))

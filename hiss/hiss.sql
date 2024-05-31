@@ -16,7 +16,10 @@ CREATE TABLE post (
   author_id INTEGER NOT NULL,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   body TEXT NOT NULL,
-  FOREIGN KEY (author_id) REFERENCES user (id)
+  reply_to_id INTEGER,
+  FOREIGN KEY (author_id) REFERENCES user (id),
+  FOREIGN KEY (reply_to_id) REFERENCES post (id),
+  CHECK (reply_to_id IS NULL OR reply_to_id != id)
 );
 
 CREATE TABLE likes (

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Reply{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+    <label>Post</label>
+    <textarea style="resize: none;" readonly disabled>{{ request.form['body'] or post['body'] }}</textarea>
+    <label for="body">Your Reply</label>
+    <textarea name="body" id="body" required></textarea>
+    <input type="submit" value="Save">
+</form>
+<hr>
+{% endblock %}

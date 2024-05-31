@@ -3,6 +3,8 @@
 {% block header %}
 <h1>{% block title %}Posts{% endblock %}</h1>
 {% if g.user %}
+<h1><a href="{{ url_for('blog.replies') }}">Replies</a></h1>
+<h1><a href="{{ url_for('blog.likes') }}">Likes</a></h1>
 <a class="action" href="{{ url_for('blog.create') }}">New</a>
 {% endif %}
 {% endblock %}
@@ -14,6 +16,9 @@
     <div class="about">{{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
     {% if g.user['id'] == post['author_id'] %}
     <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+    {% endif %}
+    {% if g.user['id'] and g.user['id'] != post['author_id'] %}
+    <a class="action" href="{{ url_for('blog.reply', id=post['id']) }}">Reply</a>
     {% endif %}
     {% if g.user['id'] and g.user['id'] != post['author_id'] %}
     <form action="{{ url_for('blog.like', post_id=post['id']) }}" method="post">
