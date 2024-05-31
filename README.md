@@ -13,3 +13,10 @@
 - Likewise, the candidates are free to use any database of their choice.
 
 - The implementation should be published in GitHub and the link to the GitHub repository should be shared with us.
+
+## Gallery
+
+![image](https://github.com/thetrotfreak/hiss/assets/45330487/e0afb149-8cd7-43c9-af77-591606aa2840)
+
+![image](https://github.com/thetrotfreak/hiss/assets/45330487/6f31e154-ab72-41c0-931d-b63b5a41d3d5)
+
