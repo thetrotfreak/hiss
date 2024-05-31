@@ -102,11 +102,21 @@ def create():
             flash(error)
         else:
             db = get_db()
-            db.execute(
-                "INSERT INTO post (body, author_id) VALUES (?, ?)",
-                (body, g.user["id"]),
-            )
-            db.commit()
+            try:
+                db.execute(
+                    "INSERT INTO post (body, author_id) VALUES (?, ?)",
+                    (body, g.user["id"]),
+                )
+            except sqlite3.IntegrityError:
+                # TODO
+                # thrown for check constraint failure
+                # blog.body should have atmost 150 characters
+                # but, what when requirements change
+                # can we get more specific error from sqlite3
+                error = "You can only post upto 150 characters"
+                flash(error)
+            else:
+                db.commit()
             return redirect(url_for("blog.index"))
 
     return render_template("blog/create.html")
